@@ -132,3 +132,6 @@ dmypy.json
 .idea/*.iws
 .idea/workspace.xml
 .idea/tasks.xml
+
+# Virtual env
+who_venv/
