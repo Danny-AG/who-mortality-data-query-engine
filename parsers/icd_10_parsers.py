@@ -1,3 +1,4 @@
+import csv
 import re
 import pandas as pd
 from definitions import RESOURCES_DIR
@@ -84,7 +85,7 @@ def detailed_code_str_to_list(detailed_list_numbers_str):
     return codes
 
 
-def get_icd10_3_char_cause_code_dict():
+def get_3_char_cause_code_dict():
     """
     Creates a dictionary of code-cause key-value pairs using the 3 character code formats contained in the ICD10 cause
     code table.
@@ -111,7 +112,7 @@ def get_icd10_3_char_cause_code_dict():
     return detailed_code_cause_dict
 
 
-def get_icd10_condensed_cause_code_dict():
+def get_condensed_cause_code_dict():
     """
     Creates a dictionary of code-cause key-value pairs using the condensed, integer only format contained in the ICD10
     cause code table.
@@ -130,7 +131,7 @@ def get_icd10_condensed_cause_code_dict():
     return cc_dict
 
 
-def get_icd10_portugal_condensed_cause_code_dict():
+def get_portugal_condensed_cause_code_dict():
     """
     Creates a dictionary of code-cause key-value pairs using the condensed, integer only format contained in the
     "ICD 10 special list for Portugal - data for 2004-2005" cause code table.
@@ -148,3 +149,23 @@ def get_icd10_portugal_condensed_cause_code_dict():
         for row in csv_reader:
             cc_dict[row[0]] = row[2]
     return cc_dict
+
+
+def get_country_codes_dict():
+    """
+    Creates a dictionary of code-country key-value pairs using the country codes csv.
+
+    See Table 11 for further details - https://www.who.int/healthinfo/statistics/documentation
+
+    :return: {code: country} dict
+    """
+    country_codes_path = RESOURCES_DIR + "/country_codes/country_codes"
+    country_codes_dict = {}
+
+    with open(country_codes_path, 'r', encoding='utf-8') as f:
+        csvreader = csv.reader(f, delimiter=',')
+        next(csvreader, None)
+        for row in csvreader:
+            country_codes_dict[int(row[0])] = row[1]
+
+    return country_codes_dict
