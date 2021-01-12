@@ -1,9 +1,13 @@
 import csv
 import re
 import pandas as pd
+import logging
 from definitions import RESOURCES_DIR
 
-# Regex's
+
+module_logger = logging.getLogger(__name__)
+
+# Regex's used for parsing codes
 cause_code_split_regex = re.compile(r"([A-Z]{1})([0-9]{2})")
 ranged_cause_code_validity_regex = re.compile(r"[A-Z]{1}[0-9]{2}-[A-Z]{1}[0-9]{2}")
 
@@ -94,6 +98,8 @@ def get_3_char_cause_code_dict():
 
     :return: {code: cause} dict
     """
+    module_logger.debug("Getting ICD10 3 character code format cause codes.")
+
     cause_codes_path = RESOURCES_DIR + r"/ICD10_list_101_103_cause_codes.csv"
     cause_codes_df = pd.read_csv(cause_codes_path, dtype={'code': int,
                                                           'Detailed List Numbers': str,
@@ -121,6 +127,8 @@ def get_condensed_cause_code_dict():
 
     :return: {code: cause} dict
     """
+    module_logger.debug("Getting ICD10 condensed format cause codes.")
+
     cause_codes_path = RESOURCES_DIR + r"/ICD10_list_101_103_cause_codes.csv"
     cc_dict = {}
     with open(cause_codes_path, 'r', encoding='utf-8') as f:
@@ -140,6 +148,8 @@ def get_portugal_condensed_cause_code_dict():
 
     :return: {code: cause} dict
     """
+    module_logger.debug("Getting ICD10 special list for Portugal format cause codes.")
+
     cause_codes_path = RESOURCES_DIR + r"/ICD10_list_UE1_cause_codes.csv"
 
     cc_dict = {}
@@ -159,6 +169,8 @@ def get_country_codes_dict():
 
     :return: {code: country} dict
     """
+    module_logger.debug("Getting ICD10 country codes.")
+
     country_codes_path = RESOURCES_DIR + "/country_codes/country_codes"
     country_codes_dict = {}
 

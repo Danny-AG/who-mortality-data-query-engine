@@ -5,13 +5,12 @@ from tqdm import tqdm
 import pandas as pd
 from pipeline.parsers import icd_10_code_parsers
 
-print("setting up logger in...")
-print(__name__)
+
 module_logger = logging.getLogger(__name__)
 
 
 def download_file(url):
-    module_logger.info(f"Downloading from {url}...")
+    module_logger.info(f"Downloading file from {url}...")
     local_filename = url.split('/')[-1]
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
@@ -34,7 +33,7 @@ def unzip_file(zip_file_path):
 
 
 def run():
-    module_logger.info("running module...")
+    module_logger.info("Running ICD10 mortality rates ingest pipeline...")
     # Download pt1 of data
     who_mortality_rates_url = "https://www.who.int/healthinfo/statistics/Morticd10_part1.zip"
     #who_mortality_rates_zip_name = download_file(who_mortality_rates_url)
@@ -50,6 +49,7 @@ def run():
                                                                     'Sex': int,
                                                                     'Deaths1': int})
 
+    module_logger.info("Processing ICD 10 DataFrame...")
     # Remove unneeded columns
     mortality_pt1_df = mortality_pt1_df[['Country', 'Year', 'List', 'Cause', 'Sex', 'Deaths1']]
 
