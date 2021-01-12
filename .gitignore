@@ -134,4 +134,4 @@ dmypy.json
 .idea/tasks.xml
 
 # Virtual env
-who_venv/
+venv/
