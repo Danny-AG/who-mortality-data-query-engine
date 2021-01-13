@@ -32,64 +32,71 @@ def unzip_file(zip_file_path):
     return zip_ref.filename.split(".")[0]
 
 
-def run():
+def run(mortality_data_url):
     """
     Downloads ICD10 mortality rates data from WHO servers, cleans and transforms data, and returns processed DataFrame.
 
     :return: Processed ICD10 mortality rates DataFrame
     """
 
-    module_logger.info("Running ICD10 mortality rates ingest pipeline...")
+    module_logger.info(f"Starting ICD10 processor for {mortality_data_url}...")
     # Download pt1 of data
-    who_mortality_rates_url = "https://www.who.int/healthinfo/statistics/Morticd10_part1.zip"
-    #who_mortality_rates_zip_name = download_file(who_mortality_rates_url)
+    mortality_rates_zip_name = download_file(mortality_data_url)
 
     # Extract data
-    #who_mortality_rates_name = unzip_file(who_mortality_rates_zip_name)
-    who_mortality_rates_name = "Morticd10_part1"
+    mortality_rates_name = unzip_file(mortality_rates_zip_name)
 
     # Read into dataframe
-    module_logger.info(f"Reading {who_mortality_rates_name} into DataFrame...")
-    mortality_pt1_df = pd.read_csv(who_mortality_rates_name, dtype={'Country': int,
-                                                                    'Year': int,
-                                                                    'Sex': int,
-                                                                    'Deaths1': int})
+    module_logger.info(f"Reading {mortality_rates_name} into DataFrame...")
+    mortality_df = pd.read_csv(mortality_rates_name, dtype={'Country': int,
+                                                            'Year': int,
+                                                            'Sex': int,
+                                                            'Deaths1': int})
 
     module_logger.info("Processing ICD 10 DataFrame...")
+
     # Remove unneeded columns
-    mortality_pt1_df = mortality_pt1_df[['Country', 'Year', 'List', 'Cause', 'Sex', 'Deaths1']]
+    mortality_df = mortality_df[['Country', 'Year', 'List', 'Cause', 'Sex', 'Deaths1']]
+
+    # Rename columns to lowercase
+    mortality_df.rename(columns={'Country': 'country',
+                                 'Year': 'year',
+                                 'List': 'list',
+                                 'Cause': 'cause',
+                                 'Sex': 'sex',
+                                 'Deaths1': 'deaths'}, inplace=True)
 
     # Map sex codes to characters
-    mortality_pt1_df['Sex'] = mortality_pt1_df['Sex'].map({1: 'm',
-                                                           2: 'f',
-                                                           9: 'u'})
+    mortality_df['sex'] = mortality_df['sex'].map({1: 'm',
+                                                   2: 'f',
+                                                   9: 'u'})
 
     # Map county codes to country names
-    mortality_pt1_df['Country'] = mortality_pt1_df['Country'].map(icd_10_code_parsers.get_country_codes_dict())
+    mortality_df['country'] = mortality_df['country'].map(icd_10_code_parsers.get_country_codes_dict())
 
     # Map ICD10 condensed cause codes to cause names
     icd_10_condensed_dict = icd_10_code_parsers.get_condensed_cause_code_dict()
-    mortality_pt1_df.loc[mortality_pt1_df['List'] == 101, 'Cause'] = \
-        mortality_pt1_df.loc[mortality_pt1_df['List'] == 101, 'Cause'].map(icd_10_condensed_dict)
+    mortality_df.loc[mortality_df['list'] == 101, 'cause'] = \
+        mortality_df.loc[mortality_df['list'] == 101, 'cause'].map(icd_10_condensed_dict)
 
     # Map ICD10 (revision 3) character cause codes to cause names
     icd_10_3_char_dict = icd_10_code_parsers.get_3_char_cause_code_dict()
-    mortality_pt1_df.loc[mortality_pt1_df['List'] == '103', 'List'] = 103
-    mortality_pt1_df.loc[mortality_pt1_df['List'] == 103, 'Cause'] = \
-        mortality_pt1_df.loc[mortality_pt1_df['List'] == 103, 'Cause'].map(icd_10_3_char_dict)
+    mortality_df.loc[mortality_df['list'] == '103', 'list'] = 103
+    mortality_df.loc[mortality_df['list'] == 103, 'cause'] = \
+        mortality_df.loc[mortality_df['list'] == 103, 'cause'].map(icd_10_3_char_dict)
 
     # Map ICD10 (revision 4) character cause codes to cause names
-    mortality_pt1_df.loc[mortality_pt1_df['List'] == '104', 'List'] = 104
-    mortality_pt1_df.loc[mortality_pt1_df['List'] == 104, 'Cause'] = \
-        mortality_pt1_df.loc[mortality_pt1_df['List'] == 104, 'Cause'].map(lambda x: x[:3]).map(icd_10_3_char_dict)
+    mortality_df.loc[mortality_df['list'] == '104', 'list'] = 104
+    mortality_df.loc[mortality_df['list'] == 104, 'cause'] = \
+        mortality_df.loc[mortality_df['list'] == 104, 'cause'].map(lambda x: x[:3]).map(icd_10_3_char_dict)
 
     # Map ICD10 (revision 10M)) character cause codes to cause names
-    mortality_pt1_df.loc[mortality_pt1_df['List'] == '10M', 'Cause'] = \
-        mortality_pt1_df.loc[mortality_pt1_df['List'] == '10M', 'Cause'].map(lambda x: x[:3]).map(icd_10_3_char_dict)
+    mortality_df.loc[mortality_df['list'] == '10M', 'cause'] = \
+        mortality_df.loc[mortality_df['list'] == '10M', 'cause'].map(lambda x: x[:3]).map(icd_10_3_char_dict)
 
     # Map ICD10 (revision Portugal special list) character cause codes to cause names
     icd_10_portugal_codes_dict = icd_10_code_parsers.get_portugal_condensed_cause_code_dict()
-    mortality_pt1_df.loc[mortality_pt1_df['List'] == 'UE1', 'Cause'] = \
-        mortality_pt1_df.loc[mortality_pt1_df['List'] == 'UE1', 'Cause'].map(icd_10_portugal_codes_dict)
+    mortality_df.loc[mortality_df['list'] == 'UE1', 'cause'] = \
+        mortality_df.loc[mortality_df['list'] == 'UE1', 'cause'].map(icd_10_portugal_codes_dict)
 
-    return mortality_pt1_df
+    return mortality_df

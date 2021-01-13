@@ -28,7 +28,11 @@ def main():
     logger = configure_logger()
 
     logger.info("Starting pipeline...")
-    processed_icd10_data = icd10_mortality_rates_processor.run()
+    icd10_mortality_rates_urls = ["https://www.who.int/healthinfo/statistics/Morticd10_part1.zip",
+                                  "https://www.who.int/healthinfo/statistics/Morticd10_part2.zip"]
+    for url in icd10_mortality_rates_urls:
+        processed_icd10_data = icd10_mortality_rates_processor.run(url)
+        # write to database
 
 
 if __name__ == "__main__":
