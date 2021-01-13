@@ -99,4 +99,8 @@ def run(mortality_data_url):
     mortality_df.loc[mortality_df['list'] == 'UE1', 'cause'] = \
         mortality_df.loc[mortality_df['list'] == 'UE1', 'cause'].map(icd_10_portugal_codes_dict)
 
+    # Aggregating duplicate rows by combining deaths
+    module_logger.info("Aggregating data...")
+    mortality_df = mortality_df.groupby(by=['country', 'year', 'cause', 'sex'], as_index=False).sum()
+
     return mortality_df
