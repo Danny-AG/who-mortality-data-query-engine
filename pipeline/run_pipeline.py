@@ -1,5 +1,6 @@
 import logging
-from pipeline.ingest import icd10_mortality_rates_ingest
+import psycopg2
+from pipeline.ingest import icd10_mortality_rates_processor
 
 
 def configure_logger():
@@ -27,7 +28,7 @@ def main():
     logger = configure_logger()
 
     logger.info("Starting pipeline...")
-    icd10_mortality_rates_ingest.run()
+    processed_icd10_data = icd10_mortality_rates_processor.run()
 
 
 if __name__ == "__main__":

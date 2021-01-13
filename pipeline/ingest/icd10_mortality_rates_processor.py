@@ -33,6 +33,12 @@ def unzip_file(zip_file_path):
 
 
 def run():
+    """
+    Downloads ICD10 mortality rates data from WHO servers, cleans and transforms data, and returns processed DataFrame.
+
+    :return: Processed ICD10 mortality rates DataFrame
+    """
+
     module_logger.info("Running ICD10 mortality rates ingest pipeline...")
     # Download pt1 of data
     who_mortality_rates_url = "https://www.who.int/healthinfo/statistics/Morticd10_part1.zip"
@@ -86,8 +92,4 @@ def run():
     mortality_pt1_df.loc[mortality_pt1_df['List'] == 'UE1', 'Cause'] = \
         mortality_pt1_df.loc[mortality_pt1_df['List'] == 'UE1', 'Cause'].map(icd_10_portugal_codes_dict)
 
-    # Write dataframe to database
-
-    # Clean out saved data and dataframes to save space
-
-    # If dataframe can handle both pt1 and pt2, download both, process and write all in one go
+    return mortality_pt1_df
