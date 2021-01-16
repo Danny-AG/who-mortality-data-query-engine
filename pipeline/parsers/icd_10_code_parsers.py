@@ -8,8 +8,8 @@ from definitions import RESOURCES_DIR
 module_logger = logging.getLogger(__name__)
 
 # Regex's used for parsing codes
-cause_code_split_regex = re.compile(r"([A-Z]{1})([0-9]{2})")
-ranged_cause_code_validity_regex = re.compile(r"[A-Z]{1}[0-9]{2}-[A-Z]{1}[0-9]{2}")
+cause_code_split_regex = re.compile(r"([A-Z]{1})([0-9]{2})$")
+ranged_cause_code_validity_regex = re.compile(r"[A-Z]{1}[0-9]{2}-[A-Z]{1}[0-9]{2}$")
 
 
 def extract_char_numeral_pair(code_str):
@@ -38,11 +38,20 @@ def code_range_str_to_list(cause_code_range_str):
     input = 'A98-B03'
     output = ['A98', 'A99', 'B01', 'B02', 'B03']
 
+    Example:
+    input = 'A99'
+    output = ['A99']
+
     :param cause_code_range_str: str
     :return: List[str]
     """
-    if ranged_cause_code_validity_regex.match(cause_code_range_str) is None:
+
+    # If single code, return as list
+    if cause_code_split_regex.match(cause_code_range_str):
         return [cause_code_range_str]
+
+    if ranged_cause_code_validity_regex.match(cause_code_range_str) is None:
+        raise ValueError(f"{cause_code_range_str} is not of the required format.")
 
     start_code, end_code = cause_code_range_str.split('-')
 
@@ -52,6 +61,10 @@ def code_range_str_to_list(cause_code_range_str):
     except ValueError as e:
         print(f"Failed to generate list between codes {start_code} and {end_code}.\n{e}")
         raise
+
+    # Check if range string is backwards, i.e. 'B01-A99'
+    if (ord(end_char)*100 + int(end_num)) < (ord(start_char)*100 + int(start_num)):
+        raise ValueError(f"{cause_code_range_str} range is backwards.")
 
     output_list = []
 
@@ -79,9 +92,21 @@ def detailed_code_str_to_list(detailed_list_numbers_str):
     input = 'A98-B03, B06-B07'
     output = ['A98', 'A99', 'B01', 'B02', 'B03', 'B06', 'B07']
 
+    Example:
+    input = 'A98-B03'
+    output = ['A98', 'A99', 'B01', 'B02', 'B03']
+
+    Example:
+    input = 'A98'
+    output = ['A98']
+
     :param detailed_list_numbers_str: str
     :return:
     """
+
+    if type(detailed_list_numbers_str) is not str:
+        raise TypeError(f"{detailed_list_numbers_str} is not of type str")
+
     codes = []
     for code_range_str in detailed_list_numbers_str.replace(' ', '').split(','):
         codes.extend(code_range_str_to_list(code_range_str))
