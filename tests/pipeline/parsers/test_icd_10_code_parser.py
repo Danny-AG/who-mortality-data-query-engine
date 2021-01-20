@@ -1,8 +1,13 @@
 import unittest
+from unittest.mock import patch
+from definitions import TEST_RESOURCES
 from pipeline.parsers.icd_10_code_parsers import extract_char_numeral_pair
 from pipeline.parsers.icd_10_code_parsers import code_range_str_to_list
 from pipeline.parsers.icd_10_code_parsers import detailed_code_str_to_list
 from pipeline.parsers.icd_10_code_parsers import get_3_char_cause_code_dict
+from pipeline.parsers.icd_10_code_parsers import get_condensed_cause_code_dict
+from pipeline.parsers.icd_10_code_parsers import get_portugal_condensed_cause_code_dict
+from pipeline.parsers.icd_10_code_parsers import get_country_codes_dict
 
 
 class ExtractCharNumeralPairTestCase(unittest.TestCase):
@@ -124,6 +129,75 @@ class DetailedCodeStrToListTestCase(unittest.TestCase):
         input_str = None
         with self.assertRaises(TypeError):
             detailed_code_str_to_list(input_str)
+
+
+class Get3CharCauseCodeDictTestCase(unittest.TestCase):
+
+    @patch('pipeline.parsers.icd_10_code_parsers.ICD_10_CAUSE_CODES_PATH', TEST_RESOURCES + '/mock_cause_codes.csv')
+    def test_successful_dict_return(self):
+
+        expected_output = {'A95': 'Cholera',
+                           'A96': 'Diarrhoea',
+                           'A97': 'Other infectious diseases',
+                           'A98': 'Other infectious diseases',
+                           'A99': 'Other infectious diseases',
+                           'B00': 'Other infectious diseases',
+                           'B01': 'Certain infectious and parasitic diseases',
+                           'B02': 'Remainder of diseases',
+                           'B03': 'Remainder of diseases',
+                           'B04': 'Certain infectious and parasitic diseases',
+                           'B05': 'Remainder of diseases',
+                           'B06': 'Certain infectious and parasitic diseases',
+                           'B07': 'Remainder of diseases',
+                           'B08': 'Remainder of diseases',
+                           'B09': 'Certain infectious and parasitic diseases',
+                           'B10': 'Certain infectious and parasitic diseases'}
+
+        self.assertEqual(get_3_char_cause_code_dict(), expected_output)
+
+
+class GetCondensedCauseCodeDictTestCase(unittest.TestCase):
+
+    @patch('pipeline.parsers.icd_10_code_parsers.ICD_10_CAUSE_CODES_PATH', TEST_RESOURCES + '/mock_cause_codes.csv')
+    def test_successful_dict_return(self):
+
+        expected_output = {'1000': 'All causes',
+                           '1001': 'Certain infectious and parasitic diseases',
+                           '1002': 'Cholera',
+                           '1003': 'Diarrhoea',
+                           '1004': 'Other infectious diseases',
+                           '1005': 'Remainder of diseases'}
+
+        self.assertEqual(get_condensed_cause_code_dict(), expected_output)
+
+
+class GetPortugalCondensedCauseCodeDictTestCase(unittest.TestCase):
+
+    @patch('pipeline.parsers.icd_10_code_parsers.ICD_10_PORTUGAL_CAUSE_CODES_PATH',
+           TEST_RESOURCES + '/mock_portugal_cause_codes.csv')
+    def test_successful_dict_return(self):
+
+        expected_output = {'CH00': 'All causes',
+                           'CH01': 'Certain infectious and parasitic diseases',
+                           'UE02': 'Cholera',
+                           'UE03': 'Diarrhoea'}
+
+        self.assertEqual(get_portugal_condensed_cause_code_dict(), expected_output)
+
+
+class GetCountryCodesTestCase(unittest.TestCase):
+
+    @patch('pipeline.parsers.icd_10_code_parsers.COUNTRY_CODES_PATH',
+           TEST_RESOURCES + '/mock_country_codes.csv')
+    def test_successful_dict_return(self):
+
+        expected_output = {1010: 'Algeria',
+                           1020: 'Angola',
+                           1025: 'Benin',
+                           1030: 'Botswana',
+                           1035: 'Burkina Faso'}
+
+        self.assertEqual(get_country_codes_dict(), expected_output)
 
 
 if __name__ == '__main__':
