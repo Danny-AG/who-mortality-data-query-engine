@@ -2,7 +2,7 @@ import csv
 import re
 import pandas as pd
 import logging
-from definitions import RESOURCES_DIR
+from definitions import ICD_10_CAUSE_CODES_PATH, ICD_10_PORTUGAL_CAUSE_CODES_PATH, COUNTRY_CODES_PATH
 
 
 module_logger = logging.getLogger(__name__)
@@ -125,10 +125,9 @@ def get_3_char_cause_code_dict():
     """
     module_logger.debug("Getting ICD10 3 character code format cause codes.")
 
-    cause_codes_path = RESOURCES_DIR + r"/ICD10_list_101_103_cause_codes.csv"
-    cause_codes_df = pd.read_csv(cause_codes_path, dtype={'code': int,
-                                                          'Detailed List Numbers': str,
-                                                          'Cause': str}).rename(
+    cause_codes_df = pd.read_csv(ICD_10_CAUSE_CODES_PATH, dtype={'code': int,
+                                                                 'Detailed List Numbers': str,
+                                                                 'Cause': str}).rename(
         columns={'Detailed List Numbers': 'detailed_codes',
                  'Cause': 'cause'})
 
@@ -154,9 +153,8 @@ def get_condensed_cause_code_dict():
     """
     module_logger.debug("Getting ICD10 condensed format cause codes.")
 
-    cause_codes_path = RESOURCES_DIR + r"/ICD10_list_101_103_cause_codes.csv"
     cc_dict = {}
-    with open(cause_codes_path, 'r', encoding='utf-8') as f:
+    with open(ICD_10_CAUSE_CODES_PATH, 'r', encoding='utf-8') as f:
         csv_reader = csv.reader(f, delimiter=',')
         next(csv_reader, None)
         for row in csv_reader:
@@ -175,10 +173,8 @@ def get_portugal_condensed_cause_code_dict():
     """
     module_logger.debug("Getting ICD10 special list for Portugal format cause codes.")
 
-    cause_codes_path = RESOURCES_DIR + r"/ICD10_list_UE1_cause_codes.csv"
-
     cc_dict = {}
-    with open(cause_codes_path, 'r', encoding='utf-8') as f:
+    with open(ICD_10_PORTUGAL_CAUSE_CODES_PATH, 'r', encoding='utf-8') as f:
         csv_reader = csv.reader(f, delimiter=',')
         next(csv_reader, None)
         for row in csv_reader:
@@ -196,10 +192,8 @@ def get_country_codes_dict():
     """
     module_logger.debug("Getting ICD10 country codes.")
 
-    country_codes_path = RESOURCES_DIR + "/country_codes/country_codes"
     country_codes_dict = {}
-
-    with open(country_codes_path, 'r', encoding='utf-8') as f:
+    with open(COUNTRY_CODES_PATH, 'r', encoding='utf-8') as f:
         csvreader = csv.reader(f, delimiter=',')
         next(csvreader, None)
         for row in csvreader:
