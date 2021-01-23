@@ -1,0 +1,69 @@
+Code,Detailed codes,Cause
+CH00,A00-Y89,ALL CAUSES OF DEATH
+CH01,A00-B99,CERTAIN INFECTIOUS  AND PARASITIC DISEASES 
+UE02,"A15-A19, B90",Tuberculosis
+UE03,A39,Meningococcal infection
+UE04,B20-B24,AIDS (HIV disease) 
+UE05,B15-B19,Viral hepatitis
+CH02,C00-D48,NEOPLASMS
+UE07,C00-C97,Malignant neoplasms
+UE08,C00-C14,"of which malignant neoplasm of lip, oral cavity, pharynx"
+UE09,C15,of which malignant neoplasm of oesophagus
+UE10,C16,of which malignant neoplasm of stomach
+UE11,C18,of which malignant neoplasm of colon
+UE12,C19-C21,of which malignant neoplasm of rectum and anus
+UE13,C22,of which malignant neoplasm of liver and the intrahepatic bile ducts
+UE14,C25,of which malignant neoplasm of pancreas
+UE15,C32-C34,of which malignant neoplasm of larynx and trachea/bronchus/lung
+UE16,C43,of which malignant neoplasm of skin
+UE17,C50,of which malignant neoplasm of breast
+UE18,C53,of which malignant neoplasm of cervix uteri
+UE19,C54-C55,of which malignant neoplasm of other parts of uterus
+UE20,C56,of which malignant neoplasm of ovary
+UE21,C61,of which malignant neoplasm of prostate
+UE22,C64,of which malignant neoplasm of kidney
+UE23,C67,of which malignant neoplasm of bladder
+UE24,C81-C96,of which malignant neoplasm of lymph/haematopoietic tissue
+CH03,D50-D89,DISEASES OF THE BLOOD AND BLOOD-FORMING ORGANS AND CERTAIN DISORDERS INVOLVING THE IMMUNE MECHANISM
+CH04,E00-E90,"ENDOCRINE,  NUTRITIONAL AND METABOLIC DISEASES"
+UE27,E10-E14,Diabetes mellitus
+CH05,F00-F99,MENTAL AND BEHAVIOURAL DISORDERS
+UE29,F10,Mental and behavioural disorders due to the use of alcohol
+UE30,"F11-F16, F18-F19","Drug dependence, toxicomania"
+CH06,G00-G99,DISEASES OF THE NERVOUS SYSTEM
+CH07,H00-H59,DISEASES OF THE EYE AND ADNEXA
+CH08,H60-H95,DISEASES OF THE EAR AND MASTOID PROCESS
+UE32,G00-G03,Meningitis (other than A39)
+CH09,I00-I99,DISEASES OF THE CIRCULATORY SYSTEM
+UE34,I20-I25,Ischaemic heart diseases
+UE35,"I30-I33, I39-I52",Other heart diseases
+UE36,I60-I69,Cerebrovascular diseases
+CH10,J00-J99,DISEASES OF THE RESPIRATORY SYSTEM
+UE38,J10-J11,Influenza
+UE39,J12-J18,Pneumonia
+UE40,J40-J47,Chronic lower respiratory diseases
+UE41,J45-J46,of which asthma
+CH11,K00-K93,DISEASES OF THE DIGESTIVE SYSTEM
+UE43,K25-K28,"Ulcer of the stomach, duodenum and jejunum"
+UE44,"K70, K73-K74",Chronic liver disease
+CH12,L00-L99,DISEASES OF THE SKIN AND SUBCUTANEOUS TISSUE
+CH13,M00-M99,DISEASES OF THE MUSCULOSKELETAL SYSTEM/CONNECTIVE TISSUE
+UE47,"M05-M06, M15-M19",Rheumatoid arthritis and osteoarthrosis
+CH14,N00-N99,DISEASES OF THE GENITOURINARY SYSTEM
+UE49,N00-N29,Diseases of the kidney and ureter
+CH15,O00-O99,"PREGNANCY, CHILDBIRTH AND THE PUERPERIUM"
+CH16,P00-P96,CERTAIN CONDITIONS ORIGINATING IN THE PERINATL PERIOD
+CH17,Q00-Q99,"CONGENITAL MALFORMATIONS, DEFORMATIONS AND CHROMOSOMAL ABNORMALITIES"
+UE53,Q00-Q07,Congenital malformations of the nervous system
+UE54,Q20-Q28,Congenital malformations of the circulatory system
+CH18,R00-R99,"SYMPTOMS, SIGNS AND ABNORMAL CLINICAL AND LABORATORY FINDINGS, NOT ELSEWHERE CLASSIFIED"
+UE56,R95,Sudden infant death syndrome
+UE57,R96-R99,Uknown and unspecified causes
+CH20,V01-Y89,EXTERNAL CAUSES OF INJURY AND POISONING
+UE59,V01-X59,Accidents
+UE60,V01-V99,of which transport accidents
+UE61,W00-W19,of which accidental falls
+UE62,X40-X49,of which accidental poisoning
+UE63,X60-X84,Suicide and intentional self-harm
+UE64,X85-Y09,"Homicide, assault"
+UE65,Y10-Y34,Events of undetermined intent
