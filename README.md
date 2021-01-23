@@ -1,5 +1,31 @@
-# WHO mortality data query engine
-A set of tools to allow easy exploration of data contained in the WHO mortality dataset - https://www.who.int/data/data-collection-tools/who-mortality-database
+
+# WHO mortality data query engine (WIP)
+A set of tools to allow easy exploration of data contained in the ICD10 revision of the WHO mortality dataset - https://www.who.int/data/data-collection-tools/who-mortality-database
+
+### Note: This repo is a work in progress and is still under development
+# Current functionality
+* Build and deploy a containerised (using Docker) PostgreSQL database that can model a simplified view of the WHO ICD10 mortality rates dataset. The simplified view consists of the following data attributes:
+	* Country - Country of death (in plain text)
+	* Year - Year of death
+	* Cause - Cause of death (in plain text)
+	* Sex - Sex of the deceased
+	* Deaths - Total number of deaths for the above defined group
+* ETL pipeline to download raw mortality rates data from the WHO website, transform into a human readable format, and write to postgres database.
+	* Note as this is an initial implementation, the granular age range data has been ignored, instead only total number of deaths is considered.
+	* Transformations include:
+		* Replacing country codes with human readable country names
+		* Replacing cause codes with human readable causes of death
+		* Replacing sex codes with human readable 'm', 'f' or 'u'
+
+# Deployment
+Deployment instructions are as followed:
+
+To deploy the whole pipeline, including deployment of database, run `deploy.sh`
+
+To deploy the database in isolation, navigate to the postgres directory and run `postgres-build.sh` followed by `postgres-run.sh`
+
+To run the ingest pipeline in isolation run `python -m pipeline.run_pipeline`
+# Future functionality
 
 ### Initial plan
 1. Build ETL pipeline to clean up data and load into database (start simple at first, remove most of unnecessary data)
@@ -12,22 +38,8 @@ A set of tools to allow easy exploration of data contained in the WHO mortality 
 
 ## Project components
 #### Database
-* Postgres database to store required data
-* Make this a docker container
+* Containerised PostgreSQL database to store required data
 
 #### Ingest pipeline
 * Loads WHO mortality datasets into a postgres database
 * Transforms the data along the way (replacing codes, removing irrelevant fields, etc)
-* Can eventually make this a docker container
-
-#### Query engine
-* Allows user to ask limited questions of the database, e.g. "show me mortality data for Algeria in 2008"
-* Will provide an API from which the user can ask the questions, e.g. "localhost:8080/mortality?country=algeria&year=2008
-* Need to research whether to use REST or graphQl
-* Need to research whether to use Flask or Django (or other)
-* Provide very simple FE UI that describes what queries are valid
-* Will return results in JSON
-* Can make this a docker container
-
-#### Analysis notebook
-* Notebook that makes use of the query engine to perform some basic analysis, e.g. "Plot mortality rates in algeria between 2000 and 2018", "Plot suicide rate per country in descending order", "Male-female heart attack ratio", etc
